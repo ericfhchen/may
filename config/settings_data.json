@@ -1,0 +1,106 @@
+{
+  "current": {
+    "color_primary": "#000000",
+    "color_secondary": "#ffffff",
+    "color_accent": "#0070c9",
+    "color_text": "#333333",
+    "color_heading": "#000000",
+    "color_button": "#0070c9",
+    "color_button_text": "#ffffff",
+    "font_heading": "helvetica_n4",
+    "font_body": "helvetica_n4",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo_width": 150,
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "link_list",
+            "settings": {
+              "title": "Quick links",
+              "menu": "footer"
+            }
+          },
+          "footer-1": {
+            "type": "text",
+            "settings": {
+              "title": "About us",
+              "text": "<p>Share store details, promotions, or brand content with your customers.</p>"
+            }
+          }
+        },
+        "block_order": [
+          "footer-0",
+          "footer-1"
+        ],
+        "settings": {
+          "show_social_icons": true,
+          "show_payment_icons": true,
+          "show_newsletter": true,
+          "newsletter_title": "Subscribe to our newsletter",
+          "newsletter_text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
+          "copyright_text": "All rights reserved."
+        }
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "color_primary": "#000000",
+      "color_secondary": "#ffffff",
+      "color_accent": "#0070c9",
+      "color_text": "#333333",
+      "color_heading": "#000000",
+      "color_button": "#0070c9",
+      "color_button_text": "#ffffff",
+      "font_heading": "helvetica_n4",
+      "font_body": "helvetica_n4",
+      "sections": {
+        "header": {
+          "type": "header",
+          "settings": {
+            "logo_width": 150,
+            "menu": "main-menu"
+          }
+        },
+        "footer": {
+          "type": "footer",
+          "blocks": {
+            "footer-0": {
+              "type": "link_list",
+              "settings": {
+                "title": "Quick links",
+                "menu": "footer"
+              }
+            },
+            "footer-1": {
+              "type": "text",
+              "settings": {
+                "title": "About us",
+                "text": "<p>Share store details, promotions, or brand content with your customers.</p>"
+              }
+            }
+          },
+          "block_order": [
+            "footer-0",
+            "footer-1"
+          ],
+          "settings": {
+            "show_social_icons": true,
+            "show_payment_icons": true,
+            "show_newsletter": true,
+            "newsletter_title": "Subscribe to our newsletter",
+            "newsletter_text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
+            "copyright_text": "All rights reserved."
+          }
+        }
+      }
+    }
+  }
+} 

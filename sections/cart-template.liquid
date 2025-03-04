@@ -1,0 +1,155 @@
+<div class="cart-template" data-section-id="{{ section.id }}" data-section-type="cart-template">
+  <div class="container">
+    <h1 class="cart-title">{{ 'cart.general.title' | t }}</h1>
+    
+    {% if cart.item_count > 0 %}
+      <form action="/cart" method="post" novalidate class="cart-form">
+        <div class="cart-items">
+          <div class="cart-header">
+            <div class="cart-header__col cart-header__col--product">{{ 'cart.label.product' | t }}</div>
+            <div class="cart-header__col cart-header__col--price">{{ 'cart.label.price' | t }}</div>
+            <div class="cart-header__col cart-header__col--quantity">{{ 'cart.label.quantity' | t }}</div>
+            <div class="cart-header__col cart-header__col--total">{{ 'cart.label.total' | t }}</div>
+          </div>
+          
+          {% for item in cart.items %}
+            <div class="cart-item" data-cart-item-key="{{ item.key }}">
+              <div class="cart-item__col cart-item__col--product">
+                <div class="cart-item__image-wrapper">
+                  <a href="{{ item.url }}" class="cart-item__image-link">
+                    <img src="{{ item | img_url: '150x' }}" alt="{{ item.title | escape }}" class="cart-item__image">
+                  </a>
+                </div>
+                
+                <div class="cart-item__details">
+                  <h2 class="cart-item__title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                  </h2>
+                  
+                  {% unless item.product.has_only_default_variant %}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {% endunless %}
+                  
+                  {% if item.properties.size > 0 %}
+                    <div class="cart-item__properties">
+                      {% for property in item.properties %}
+                        {% unless property.last == blank %}
+                          <div class="cart-item__property">
+                            <span class="cart-item__property-label">{{ property.first }}:</span>
+                            <span class="cart-item__property-value">
+                              {% if property.last contains '/uploads/' %}
+                                <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
+                              {% else %}
+                                {{ property.last }}
+                              {% endif %}
+                            </span>
+                          </div>
+                        {% endunless %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  
+                  <button type="button" class="cart-item__remove" data-cart-remove="{{ item.key }}" aria-label="{{ 'cart.general.remove' | t }}">
+                    {{ 'cart.general.remove' | t }}
+                  </button>
+                </div>
+              </div>
+              
+              <div class="cart-item__col cart-item__col--price">
+                {% if item.original_price != item.final_price %}
+                  <span class="cart-item__price cart-item__price--sale">{{ item.final_price | money }}</span>
+                  <s class="cart-item__price cart-item__price--compare">{{ item.original_price | money }}</s>
+                {% else %}
+                  <span class="cart-item__price">{{ item.original_price | money }}</span>
+                {% endif %}
+              </div>
+              
+              <div class="cart-item__col cart-item__col--quantity">
+                <div class="quantity-selector">
+                  <button type="button" class="quantity-decrease" aria-label="{{ 'products.product.decrease_quantity' | t }}">-</button>
+                  <input
+                    type="number"
+                    name="updates[{{ item.key }}]"
+                    id="updates_{{ item.key }}"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    class="quantity-input"
+                    aria-label="{{ 'cart.label.quantity' | t }}"
+                    data-cart-quantity-input="{{ item.key }}"
+                  >
+                  <button type="button" class="quantity-increase" aria-label="{{ 'products.product.increase_quantity' | t }}">+</button>
+                </div>
+              </div>
+              
+              <div class="cart-item__col cart-item__col--total">
+                <span class="cart-item__total">{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+        <div class="cart-footer">
+          <div class="cart-footer__update">
+            <button type="submit" name="update" class="btn btn--secondary cart-footer__update-button">
+              {{ 'cart.general.update' | t }}
+            </button>
+          </div>
+          
+          <div class="cart-footer__summary">
+            <div class="cart-footer__subtotal">
+              <span class="cart-footer__subtotal-label">{{ 'cart.general.subtotal' | t }}</span>
+              <span class="cart-footer__subtotal-value">{{ cart.total_price | money }}</span>
+            </div>
+            
+            {% if cart.cart_level_discount_applications.size > 0 %}
+              <div class="cart-footer__discounts">
+                {% for discount_application in cart.cart_level_discount_applications %}
+                  <div class="cart-footer__discount">
+                    <span class="cart-footer__discount-title">{{ discount_application.title }}</span>
+                    <span class="cart-footer__discount-amount">-{{ discount_application.total_allocated_amount | money }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+            
+            <div class="cart-footer__note">
+              <label for="CartNote" class="cart-footer__note-label">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" id="CartNote" class="cart-footer__note-input">{{ cart.note }}</textarea>
+            </div>
+            
+            <div class="cart-footer__shipping-note">
+              {{ 'cart.general.shipping_at_checkout' | t }}
+            </div>
+            
+            <div class="cart-footer__checkout">
+              <button type="submit" name="checkout" class="btn cart-footer__checkout-button">
+                {{ 'cart.general.checkout' | t }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    {% else %}
+      <div class="cart-empty">
+        <p class="cart-empty__message">{{ 'cart.general.empty' | t }}</p>
+        <div class="cart-empty__button-wrapper">
+          <a href="/collections/all" class="btn">{{ 'cart.general.continue_shopping' | t }}</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "label": "Show cart note",
+      "default": true
+    }
+  ]
+}
+{% endschema %} 

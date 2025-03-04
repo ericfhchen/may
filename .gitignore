@@ -1,0 +1,20 @@
+# Shopify config
+config.yml
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Node modules
+node_modules/
+
+# Build directory
+dist/
+build/ 

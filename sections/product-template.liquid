@@ -1,0 +1,187 @@
+<div class="product-template" data-section-id="{{ section.id }}" data-section-type="product-template">
+  <div class="container">
+    <div class="product">
+      <div class="product__media">
+        {% if product.media.size > 0 %}
+          <div class="product-gallery">
+            <div class="product-gallery__main">
+              <img
+                src="{{ product.featured_media | img_url: '600x' }}"
+                alt="{{ product.featured_media.alt | escape }}"
+                class="product-main-image"
+                id="ProductMainImage"
+                data-zoom-image="{{ product.featured_media | img_url: '1200x' }}"
+              >
+            </div>
+            
+            {% if product.media.size > 1 %}
+              <div class="product-gallery__thumbnails">
+                {% for media in product.media %}
+                  <div class="product-thumbnail{% if forloop.first %} active{% endif %}" data-full-image="{{ media | img_url: '600x' }}">
+                    <img src="{{ media | img_url: '150x' }}" alt="{{ media.alt | escape }}">
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="product-gallery">
+            <div class="product-gallery__main">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="product__info">
+        <h1 class="product__title">{{ product.title }}</h1>
+        
+        <div class="product__price">
+          {% if product.compare_at_price_max > product.price %}
+            <span class="product__price--sale">{{ product.price | money }}</span>
+            <s class="product__price--compare">{{ product.compare_at_price | money }}</s>
+          {% else %}
+            <span class="product__price--regular">{{ product.price | money }}</span>
+          {% endif %}
+        </div>
+        
+        {% if product.description != blank %}
+          <div class="product__description rte">
+            {{ product.description }}
+          </div>
+        {% endif %}
+        
+        {% form 'product', product, class: 'product-form', id: 'ProductForm' %}
+          {% unless product.has_only_default_variant %}
+            <div class="product-form__variants">
+              {% for option in product.options_with_values %}
+                <div class="product-form__option">
+                  <label class="product-form__option-label" for="Option{{ option.position }}">
+                    {{ option.name }}
+                  </label>
+                  
+                  <select
+                    id="Option{{ option.position }}"
+                    class="product-form__option-select"
+                    name="options[{{ option.name }}]"
+                  >
+                    {% for value in option.values %}
+                      <option
+                        value="{{ value }}"
+                        {% if option.selected_value == value %}selected="selected"{% endif %}
+                      >
+                        {{ value }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              {% endfor %}
+            </div>
+          {% endunless %}
+          
+          <div class="product-form__quantity">
+            <label for="Quantity" class="product-form__quantity-label">{{ 'products.product.quantity' | t }}</label>
+            <div class="quantity-selector">
+              <button type="button" class="quantity-decrease" aria-label="{{ 'products.product.decrease_quantity' | t }}">-</button>
+              <input
+                type="number"
+                id="Quantity"
+                name="quantity"
+                value="1"
+                min="1"
+                class="quantity-input"
+                aria-label="{{ 'products.product.quantity' | t }}"
+              >
+              <button type="button" class="quantity-increase" aria-label="{{ 'products.product.increase_quantity' | t }}">+</button>
+            </div>
+          </div>
+          
+          <div class="product-form__buttons">
+            <button
+              type="submit"
+              name="add"
+              class="btn product-form__add-to-cart"
+              {% unless product.available %}disabled="disabled"{% endunless %}
+            >
+              {% if product.available %}
+                {{ 'products.product.add_to_cart' | t }}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+          
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% endform %}
+        
+        <div class="product__meta">
+          {% if section.settings.show_vendor and product.vendor != blank %}
+            <div class="product__vendor">
+              <span class="product__meta-label">{{ 'products.product.vendor' | t }}:</span>
+              <span class="product__meta-value">{{ product.vendor }}</span>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_sku and product.selected_or_first_available_variant.sku != blank %}
+            <div class="product__sku">
+              <span class="product__meta-label">{{ 'products.product.sku' | t }}:</span>
+              <span class="product__meta-value" id="ProductSku">{{ product.selected_or_first_available_variant.sku }}</span>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_share_buttons %}
+            <div class="product__share">
+              <span class="product__meta-label">{{ 'products.product.share' | t }}:</span>
+              <div class="social-sharing">
+                <a target="_blank" href="//www.facebook.com/sharer.php?u={{ shop.url | append: product.url }}" class="social-sharing__link">
+                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M18.05.811q.439 0 .744.305t.305.744v16.637q0 .439-.305.744t-.744.305h-4.732v-7.221h2.415l.342-2.854h-2.757v-1.83q0-.659.293-1t1.073-.342h1.488V3.762q-.976-.098-2.171-.098-1.634 0-2.635.964t-1 2.72V9.47H7.951v2.854h2.415v7.221H1.413q-.439 0-.744-.305t-.305-.744V1.859q0-.439.305-.744T1.413.81H18.05z" fill="currentColor"/>
+                  </svg>
+                  <span class="visually-hidden">Facebook</span>
+                </a>
+                <a target="_blank" href="//twitter.com/share?text={{ product.title | url_encode }}&amp;url={{ shop.url | append: product.url | url_encode }}" class="social-sharing__link">
+                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M19.551 4.208q-.815 1.202-1.956 2.038 0 .082.02.255t.02.255q0 1.589-.469 3.179t-1.426 3.036-2.272 2.567-3.158 1.793-3.963.672q-3.301 0-6.031-1.773.571.041.937.041 2.751 0 4.911-1.671-1.284-.02-2.292-.784T2.456 11.85q.346.082.754.082.55 0 1.039-.139-1.365-.285-2.262-1.365T1.09 7.918v-.041q.774.408 1.773.448-.795-.53-1.263-1.396t-.469-1.864q0-1.019.509-1.997 1.487 1.854 3.596 2.924T9.81 7.184q-.143-.509-.143-.897 0-1.63 1.161-2.781t2.832-1.151q.815 0 1.569.326t1.284.917q1.345-.265 2.506-.958-.428 1.386-1.732 2.18 1.243-.143 2.262-.611z" fill="currentColor"/>
+                  </svg>
+                  <span class="visually-hidden">Twitter</span>
+                </a>
+                <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_encode }}&amp;media={{ product.featured_image | img_url: '1024x1024' | url_encode }}&amp;description={{ product.title | url_encode }}" class="social-sharing__link">
+                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 0C4.478 0 0 4.477 0 10c0 4.237 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.6-.299-1.486c0-1.39.806-2.428 1.81-2.428.852 0 1.264.64 1.264 1.408 0 .858-.546 2.14-.828 3.33-.236.995.5 1.807 1.48 1.807 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.135-4.515 4.34 0 .859.331 1.781.745 2.281a.3.3 0 0 1 .069.288l-.278 1.133c-.044.183-.145.223-.335.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.525-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S15.522 0 10 0z" fill="currentColor"/>
+                  </svg>
+                  <span class="visually-hidden">Pinterest</span>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    }
+  ]
+}
+{% endschema %} 
