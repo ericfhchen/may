@@ -2,7 +2,7 @@
   <div class="container">
     <div class="site-footer__content">
       <div class="site-footer__column site-footer__column--logo">
-        {% if section.settings.footer_logo != blank %}
+        {% comment %} {% if section.settings.footer_logo != blank %}
           <a href="/" class="site-footer__logo">
             {% assign logo_alt = section.settings.footer_logo.alt | default: shop.name %}
             {{ section.settings.footer_logo | image_url: width: 150 | image_tag: alt: logo_alt, class: 'site-footer__logo-image' }}
@@ -11,7 +11,7 @@
           <a href="/" class="site-footer__logo site-footer__logo-text">
             {{ shop.name }}
           </a>
-        {% endif %}
+        {% endif %} {% endcomment %}
         
         {% if section.settings.show_social_icons %}
           <ul class="social-icons">
@@ -48,35 +48,9 @@
         {% endif %}
       </div>
       
-      {% for block in section.blocks %}
-        {% case block.type %}
-          {% when 'link_list' %}
-            <div class="site-footer__column site-footer__column--menu">
-              <h3 class="site-footer__title">{{ block.settings.title }}</h3>
-              {% assign footer_menu = block.settings.menu %}
-              {% if footer_menu.links.size > 0 %}
-                <ul class="site-footer__menu">
-                  {% for link in footer_menu.links %}
-                    <li class="site-footer__menu-item">
-                      <a href="{{ link.url }}" class="site-footer__menu-link">{{ link.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          {% when 'text' %}
-            <div class="site-footer__column site-footer__column--text">
-              <h3 class="site-footer__title">{{ block.settings.title }}</h3>
-              <div class="site-footer__text">
-                {{ block.settings.text }}
-              </div>
-            </div>
-        {% endcase %}
-      {% endfor %}
-      
       {% if section.settings.show_newsletter %}
         <div class="site-footer__column site-footer__column--newsletter">
-          <h3 class="site-footer__title">{{ section.settings.newsletter_title }}</h3>
+          {% comment %} <h3 class="site-footer__title">{{ section.settings.newsletter_title }}</h3> {% endcomment %}
           {% if section.settings.newsletter_text != blank %}
             <div class="site-footer__text">
               {{ section.settings.newsletter_text }}

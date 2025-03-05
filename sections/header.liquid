@@ -2,16 +2,10 @@
   <div class="container">
     <div class="site-header__content">
       <div class="site-header__logo-container">
-        {% if section.settings.logo != blank %}
           <a href="/" class="site-header__logo">
             {% assign logo_alt = section.settings.logo.alt | default: shop.name %}
-            {{ section.settings.logo | image_url: width: 150 | image_tag: alt: logo_alt, class: 'site-header__logo-image' }}
+            <img src="{{ 'may-logo.svg' | asset_url }}" alt="{{ logo_alt }}" class="site-header__logo-image">
           </a>
-        {% else %}
-          <a href="/" class="site-header__logo site-header__logo-text">
-            {{ shop.name }}
-          </a>
-        {% endif %}
       </div>
 
       <nav class="site-nav" role="navigation">
@@ -19,60 +13,73 @@
           {% for link in section.settings.menu.links %}
             <li class="site-nav__item">
               <a href="{{ link.url }}" class="site-nav__link{% if link.active %} site-nav__link--active{% endif %}">
-                {{ link.title }}
+                <span>{{ link.title | upcase }}</span>
               </a>
             </li>
           {% endfor %}
+          <li class="site-nav__item">
+            <button type="button" class="cart-toggle" aria-expanded="false" aria-controls="cart-overlay">
+              <span class="site-nav__link">CART</span>
+              {% comment %} <span class="site-nav__link">{{ cart.item_count }}</span> {% endcomment %}
+            </button>
+          </li>
         </ul>
       </nav>
 
-      <div class="site-header__icons">
-        <a href="/search" class="site-header__icon">
-          <span class="visually-hidden">{{ 'general.search.title' | t }}</span>
-          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-            <path d="M8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zm6.32-1.094l3.58 3.58a1 1 0 1 1-1.415 1.413l-3.58-3.58a8 8 0 1 1 1.414-1.414z" fill="currentColor"/>
-          </svg>
-        </a>
-        
-        <a href="/account" class="site-header__icon">
-          <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
-          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-            <path d="M10 11a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z" fill="currentColor"/>
-          </svg>
-        </a>
-        
-        <a href="/cart" class="site-header__icon site-header__cart">
-          <span class="visually-hidden">{{ 'cart.general.title' | t }}</span>
-          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-            <path d="M4 2h16l-3 10H7L4 2zm3 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm9 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="currentColor"/>
-          </svg>
-          <span class="site-header__cart-count">{{ cart.item_count }}</span>
-        </a>
-        
-        <button type="button" class="site-header__icon mobile-menu-toggle" aria-expanded="false" aria-controls="mobile-menu">
-          <span class="visually-hidden">{{ 'general.navigation.menu' | t }}</span>
-          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-            <path d="M3 4h14a1 1 0 0 1 0 2H3a1 1 0 1 1 0-2zm0 5h14a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2zm0 5h14a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2z" fill="currentColor"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <div class="mobile-menu" id="mobile-menu">
-    <div class="container">
-      <ul class="mobile-menu__list">
-        {% for link in section.settings.menu.links %}
-          <li class="mobile-menu__item">
-            <a href="{{ link.url }}" class="mobile-menu__link{% if link.active %} mobile-menu__link--active{% endif %}">
-              {{ link.title }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+
     </div>
   </div>
 </header>
+
+<div id="cart-overlay" class="cart-overlay" aria-hidden="true">
+  <div class="cart-overlay__content">
+    <div class="cart-overlay__header">
+      <h2 class="cart-overlay__title">YOUR CART</h2>
+      <button type="button" class="cart-overlay__close" aria-label="Close cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="cart-overlay__items">
+      {% if cart.item_count > 0 %}
+        <form action="/cart" method="post" novalidate>
+          {% for item in cart.items %}
+            <div class="cart-overlay__item" data-cart-item="{{ item.key }}">
+              <div class="cart-overlay__item-image">
+                <img src="{{ item.image | img_url: '120x' }}" alt="{{ item.title | escape }}">
+              </div>
+              <div class="cart-overlay__item-content">
+                <h3 class="cart-overlay__item-title">{{ item.product.title }}</h3>
+                <div class="cart-overlay__item-price">{{ item.final_price | money }}</div>
+                <div class="cart-overlay__item-quantity">
+                  <button type="button" class="quantity-adjust" data-action="decrease">-</button>
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity">
+                  <button type="button" class="quantity-adjust" data-action="increase">+</button>
+                </div>
+                <button type="button" class="cart-overlay__item-remove" data-cart-remove="{{ item.key }}">Remove</button>
+              </div>
+            </div>
+          {% endfor %}
+          
+          <div class="cart-overlay__footer">
+            <div class="cart-overlay__subtotal">
+              <span>Subtotal</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+            <button type="submit" name="checkout" class="cart-overlay__checkout">CHECKOUT</button>
+          </div>
+        </form>
+      {% else %}
+        <div class="cart-overlay__empty">
+          <p>Your cart is empty</p>
+          <a href="/collections/all" class="cart-overlay__continue">CONTINUE SHOPPING</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
 
 {% schema %}
 {
@@ -107,4 +114,145 @@
     }
   ]
 }
-{% endschema %} 
+{% endschema %}
+
+<script>
+  class CartOverlay {
+    constructor() {
+      this.overlay = document.getElementById('cart-overlay');
+      this.toggleButton = document.querySelector('.cart-toggle');
+      this.closeButton = document.querySelector('.cart-overlay__close');
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      this.toggleButton.addEventListener('click', () => this.toggleCart());
+      this.closeButton.addEventListener('click', () => this.closeCart());
+      this.overlay.addEventListener('click', (e) => {
+        if (e.target === this.overlay) {
+          this.closeCart();
+        }
+      });
+      
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeCart();
+        }
+      });
+
+      // Handle quantity adjustments
+      this.overlay.addEventListener('click', (e) => {
+        const quantityButton = e.target.closest('.quantity-adjust');
+        if (quantityButton) {
+          const input = quantityButton.parentNode.querySelector('input');
+          const currentValue = parseInt(input.value, 10);
+          if (quantityButton.dataset.action === 'increase') {
+            input.value = currentValue + 1;
+          } else {
+            input.value = Math.max(0, currentValue - 1);
+          }
+          this.updateCart();
+        }
+      });
+
+      // Handle item removal
+      this.overlay.addEventListener('click', (e) => {
+        const removeButton = e.target.closest('[data-cart-remove]');
+        if (removeButton) {
+          const itemKey = removeButton.dataset.cartRemove;
+          this.removeItem(itemKey);
+        }
+      });
+    }
+
+    toggleCart() {
+      const isOpen = this.overlay.classList.contains('is-active');
+      if (isOpen) {
+        this.closeCart();
+      } else {
+        this.openCart();
+      }
+    }
+
+    openCart() {
+      this.overlay.classList.add('is-active');
+      this.toggleButton.setAttribute('aria-expanded', 'true');
+      this.overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    closeCart() {
+      this.overlay.classList.remove('is-active');
+      this.toggleButton.setAttribute('aria-expanded', 'false');
+      this.overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    async updateCart() {
+      const form = this.overlay.querySelector('form');
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch('/cart/update.js', {
+          method: 'POST',
+          body: formData
+        });
+        const cart = await response.json();
+        this.updateCartUI(cart);
+      } catch (error) {
+        console.error('Error updating cart:', error);
+      }
+    }
+
+    async removeItem(itemKey) {
+      try {
+        const response = await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: itemKey,
+            quantity: 0
+          })
+        });
+        const cart = await response.json();
+        this.updateCartUI(cart);
+      } catch (error) {
+        console.error('Error removing item:', error);
+      }
+    }
+
+    updateCartUI(cart) {
+      // Update cart count
+      const count = document.querySelector('.cart-toggle__count');
+      if (count) {
+        count.textContent = cart.item_count;
+      }
+
+      // Update subtotal
+      const subtotal = document.querySelector('.cart-overlay__subtotal span:last-child');
+      if (subtotal) {
+        subtotal.textContent = this.formatMoney(cart.total_price);
+      }
+
+      // If cart is empty, refresh the page to show empty cart state
+      if (cart.item_count === 0) {
+        window.location.reload();
+      }
+    }
+
+    formatMoney(cents) {
+      return (cents / 100).toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      });
+    }
+  }
+
+  // Initialize cart overlay
+  document.addEventListener('DOMContentLoaded', () => {
+    new CartOverlay();
+  });
+</script> 

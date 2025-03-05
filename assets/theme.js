@@ -1,5 +1,19 @@
 // Theme JavaScript
 document.addEventListener('DOMContentLoaded', function() {
+  // Track mouse position for glow effects
+  const navLinks = document.querySelectorAll('.site-nav__link, .cart-toggle');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('mouseenter', (e) => {
+      const rect = link.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      link.style.setProperty('--x', `${centerX}px`);
+      link.style.setProperty('--y', `${centerY}px`);
+    });
+  });
+
   // Mobile menu toggle
   const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');
@@ -61,4 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Initialize cart overlay
+  document.addEventListener('DOMContentLoaded', () => {
+    new CartOverlay();
+  });
 }); 
