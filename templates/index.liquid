@@ -1,1 +1,157 @@
-{{ content_for_index }} 
+{{ content_for_index }}
+
+{% section 'product-grid' %} 
+
+<div class="background-circles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; overflow: hidden; pointer-events: none;">
+  <div class="circle circle-green" style="position: absolute; filter: blur(35px); border-radius: 50%;"></div>
+  <div class="circle circle-pink" style="position: absolute; filter: blur(35px); border-radius: 50%;"></div>
+  <div class="circle circle-yellow" style="position: absolute; filter: blur(35px); border-radius: 50%;"></div>
+</div>
+
+<div class="video-container">
+  <div class="container">
+    <div class="video-wrapper" style="position: relative;">
+      <video class="video"
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        "
+      >
+        <source src="https://cdn.shopify.com/videos/c/o/v/65c29df57278420c8c38885ededa28b5.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  .circle-green {
+    background-color: #0CBD09;
+  }
+  
+  .circle-pink {
+    background-color: #F9A4CD;
+  }
+  
+  .circle-yellow {
+    background-color: #F1F9A4;
+  }
+
+  .video-container {
+    width: 100%;
+    position: relative;
+  }
+
+  .video {
+    width: 100%;
+    height: auto;
+  }
+  
+  
+  
+  
+  
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const circles = document.querySelectorAll('.circle');
+    const isMobile = window.innerWidth < 768;
+    
+    // Set size range based on device
+    const minSize = isMobile ? 50 : 75;
+    const maxSize = isMobile ? 75 : 125;
+    
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Divide the viewport into sections to ensure spread
+    const sections = [
+      { x: 0, y: 0 },                                  // top-left
+      { x: viewportWidth * 0.6, y: 0 },                // top-right
+      { x: 0, y: viewportHeight * 0.6 },               // bottom-left
+      { x: viewportWidth * 0.6, y: viewportHeight * 0.6 } // bottom-right
+    ];
+    
+    // Shuffle sections to randomize which circle goes where
+    const shuffledSections = [...sections].sort(() => Math.random() - 0.5);
+    
+    circles.forEach((circle, index) => {
+      // Random size
+      const size = Math.floor(Math.random() * (maxSize - minSize + 1)) + minSize;
+      circle.style.width = `${size}px`;
+      circle.style.height = `${size}px`;
+      
+      // Get a section for this circle
+      const section = shuffledSections[index % shuffledSections.length];
+      
+      // Calculate max position within this section
+      const sectionWidth = viewportWidth * 0.4;
+      const sectionHeight = viewportHeight * 0.4;
+      
+      // Random position within section (accounting for circle size)
+      const maxX = sectionWidth - size;
+      const maxY = sectionHeight - size;
+      
+      const randomX = Math.floor(Math.random() * maxX) + section.x;
+      const randomY = Math.floor(Math.random() * maxY) + section.y;
+      
+      circle.style.left = `${randomX}px`;
+      circle.style.top = `${randomY}px`;
+    });
+    
+    // Update positions on resize
+    window.addEventListener('resize', function() {
+      const newIsMobile = window.innerWidth < 768;
+      const newMinSize = newIsMobile ? 50 : 75;
+      const newMaxSize = newIsMobile ? 75 : 125;
+      
+      const newViewportWidth = window.innerWidth;
+      const newViewportHeight = window.innerHeight;
+      
+      // Recalculate sections
+      const newSections = [
+        { x: 0, y: 0 },                                      // top-left
+        { x: newViewportWidth * 0.6, y: 0 },                 // top-right
+        { x: 0, y: newViewportHeight * 0.6 },                // bottom-left
+        { x: newViewportWidth * 0.6, y: newViewportHeight * 0.6 } // bottom-right
+      ];
+      
+      // Shuffle sections again
+      const newShuffledSections = [...newSections].sort(() => Math.random() - 0.5);
+      
+      circles.forEach((circle, index) => {
+        // Update size if device type changed
+        if (isMobile !== newIsMobile) {
+          const newSize = Math.floor(Math.random() * (newMaxSize - newMinSize + 1)) + newMinSize;
+          circle.style.width = `${newSize}px`;
+          circle.style.height = `${newSize}px`;
+        }
+        
+        // Get current size
+        const size = parseInt(circle.style.width);
+        
+        // Get a section for this circle
+        const section = newShuffledSections[index % newShuffledSections.length];
+        
+        // Calculate max position within this section
+        const sectionWidth = newViewportWidth * 0.4;
+        const sectionHeight = newViewportHeight * 0.4;
+        
+        // Random position within section (accounting for circle size)
+        const maxX = sectionWidth - size;
+        const maxY = sectionHeight - size;
+        
+        const randomX = Math.floor(Math.random() * maxX) + section.x;
+        const randomY = Math.floor(Math.random() * maxY) + section.y;
+        
+        circle.style.left = `${randomX}px`;
+        circle.style.top = `${randomY}px`;
+      });
+    });
+  });
+</script>
+

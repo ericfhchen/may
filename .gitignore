@@ -19,3 +19,24 @@ node_modules/
 dist/
 build/ 
 .shopify
+
+# Shopify theme
+config/settings_data.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build files
+*.zip
+*.gz
+
+# Cursor files
+.cursor/
+
+# Map files
+*.js.map
+*.css.map

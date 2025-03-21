@@ -12,13 +12,13 @@
         <ul class="site-nav__list">
           {% for link in section.settings.menu.links %}
             <li class="site-nav__item">
-              <a href="{{ link.url }}" class="site-nav__link{% if link.active %} site-nav__link--active{% endif %}">
+              <a href="{{ link.url }}" class="hover-dot site-nav__link{% if link.active %} hover-dot--active{% endif %}">
                 <span>{{ link.title | upcase }}</span>
               </a>
             </li>
           {% endfor %}
           <li class="site-nav__item">
-            <button type="button" class="cart-toggle" aria-expanded="false" aria-controls="cart-overlay">
+            <button type="button" class="hover-dot cart-toggle" aria-expanded="false" aria-controls="cart-overlay">
               <span class="site-nav__link">CART</span>
               {% comment %} <span class="site-nav__link">{{ cart.item_count }}</span> {% endcomment %}
             </button>
@@ -33,15 +33,6 @@
 
 <div id="cart-overlay" class="cart-overlay" aria-hidden="true">
   <div class="cart-overlay__content">
-    <div class="cart-overlay__header">
-      <h2 class="cart-overlay__title">YOUR CART</h2>
-      <button type="button" class="cart-overlay__close" aria-label="Close cart">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-    
     <div class="cart-overlay__items">
       {% if cart.item_count > 0 %}
         <form action="/cart" method="post" novalidate>
@@ -68,18 +59,358 @@
               <span>Subtotal</span>
               <span>{{ cart.total_price | money }}</span>
             </div>
-            <button type="submit" name="checkout" class="cart-overlay__checkout">CHECKOUT</button>
+            <button type="submit" name="checkout" class="hover-dot cart-overlay__checkout">CHECKOUT</button>
           </div>
         </form>
       {% else %}
         <div class="cart-overlay__empty">
           <p>Your cart is empty</p>
-          <a href="/collections/all" class="cart-overlay__continue">CONTINUE SHOPPING</a>
         </div>
       {% endif %}
     </div>
   </div>
 </div>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0.5rem;
+  }
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+  .site-header {
+  width: calc(100% - 17px); /* Adjusting for scrollbar width */
+  position: fixed;
+  z-index: 100;
+  
+}
+
+.site-header__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+}
+
+.site-header__logo {
+  display: block;
+  max-width: 150px;
+}
+
+.site-header__logo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.site-header__logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Navigation */
+.site-nav__list {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+}
+
+.site-nav__item {
+  position: relative;
+  display: flex;
+  overflow: visible;
+}
+
+.site-nav__link {
+  display: inline-block;
+  position: relative;
+  color: var(--primary-color);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  overflow: visible;
+  z-index: 1;
+  font-size: 2.5rem;
+  line-height: 1;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.site-nav__link span {
+  position: relative;
+  z-index: 2;
+}
+
+.site-nav__link:hover {
+  text-decoration: none;
+}
+
+/* Cart Toggle */
+.cart-toggle {
+  display: flex;
+  align-items: top;
+  gap: 8px;
+  background: none;
+  border: none;
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+  color: var(--primary-color);
+  font-size: inherit;
+  overflow: visible;
+  font-family: inherit;
+  z-index: 1;
+}
+
+.cart-toggle__text {
+  position: relative;
+  z-index: 2;
+}
+
+.cart-toggle__count {
+  color: var(--primary-color);
+  position: relative;
+  z-index: 2;
+  font-size: inherit;
+}
+
+@media (max-width: 768px) {
+  .site-header__content {
+    flex-direction: row;
+    align-items: top;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .site-nav__list {
+    gap: 10px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .site-header {
+   width: 100%;  
+  }
+
+  .site-nav__list {
+    flex-direction: row;
+    align-items: top;
+    gap: 8px;
+  }
+  
+  .site-nav__link,
+  .cart-toggle {
+    font-size: 1.2rem;
+  }
+  
+  .site-header__logo {
+    max-width: 75px;
+  }
+  
+  .cart-overlay__content {
+    max-width: 100%;
+  }
+  
+
+} 
+
+/* Updated Cart Overlay Styles */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  z-index: 100;
+}
+
+.cart-overlay.is-active {
+  display: block;
+}
+
+.cart-overlay__content {
+  position: absolute;
+  top: calc(0.5rem + 2.5rem + 20px); /* header padding + nav font size + 20px */
+  right: 0.5rem;
+  width: 100%;
+  max-width: 15svw;
+  background-color: var(--background-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+
+}
+
+.cart-overlay__items {
+}
+
+.cart-overlay__item {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.cart-overlay__item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.cart-overlay__item-image {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.cart-overlay__item-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.cart-overlay__item-content {
+  width: 100%;
+}
+
+.cart-overlay__item-title {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.cart-overlay__item-price {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  line-height: 1.25;
+}
+
+.cart-overlay__item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cart-overlay__item-quantity input {
+  width: 1rem;
+  text-align: center;
+  font-family: var(--font-family);
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  pointer-events: none;
+  user-select: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 0;
+}
+
+/* Remove input number spinner arrows across browsers */
+.cart-overlay__item-quantity input::-webkit-outer-spin-button,
+.cart-overlay__item-quantity input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-adjust {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+.cart-overlay__item-remove {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.cart-overlay__footer {
+  margin-top: 0.75rem;
+}
+
+.cart-overlay__subtotal {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  padding: 0 0.5rem;
+}
+
+.cart-overlay__checkout {
+  width: 100%;
+  background-color: var(--green);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 0;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: block;
+  text-align: left;
+  position: relative;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  padding-left: 0.5rem;
+}
+
+.cart-overlay__checkout:hover {
+  background-color: var(--green-hover);
+}
+
+.cart-overlay__continue {
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+}
+
+.cart-overlay__empty {
+  padding: 2rem; 
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .cart-overlay__content {
+    max-width: 25svw;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart-overlay__content {
+    max-width: 35svw;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-overlay__content {
+    max-width: 55svw;
+  }
+
+  .cart-overlay__item-title, .cart-overlay__item-price, .cart-overlay__item-quantity input, .cart-overlay__item-quantity button, .cart-overlay__item-remove {
+    font-size: 0.75rem;
+  }
+
+  .cart-overlay__subtotal, .cart-overlay__checkout {
+    font-size: 1rem;
+  }
+}
+</style>
 
 {% schema %}
 {
@@ -120,16 +451,43 @@
   class CartOverlay {
     constructor() {
       this.overlay = document.getElementById('cart-overlay');
+      this.content = this.overlay.querySelector('.cart-overlay__content');
+      this.itemsContainer = this.overlay.querySelector('.cart-overlay__items');
       this.toggleButton = document.querySelector('.cart-toggle');
-      this.closeButton = document.querySelector('.cart-overlay__close');
+      this.isOpen = false;
+      this.isAddingToCart = false;
+      this.isRefreshing = false;
+      this.lastProductAddedTime = 0;
+      this.pendingCartOpen = false;
+      
+      // Initialize - ensure cart is up to date
+      this.refreshCart();
       this.bindEvents();
     }
 
     bindEvents() {
-      this.toggleButton.addEventListener('click', () => this.toggleCart());
-      this.closeButton.addEventListener('click', () => this.closeCart());
-      this.overlay.addEventListener('click', (e) => {
-        if (e.target === this.overlay) {
+      // Toggle cart when button is clicked
+      this.toggleButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Prevent event from bubbling
+        
+        if (this.isOpen) {
+          // If cart is already open, just close it immediately
+          this.closeCart();
+        } else {
+          // If cart is closed, refresh and then open it
+          this.refreshCart().then(() => {
+            this.openCart();
+          });
+        }
+      });
+      
+      // Close cart when clicking outside
+      document.addEventListener('click', (e) => {
+        if (this.isOpen && 
+            !this.content.contains(e.target) && 
+            !this.toggleButton.contains(e.target) &&
+            !e.target.closest('[name="add"]')) { // Don't close if clicking add to cart
           this.closeCart();
         }
       });
@@ -150,9 +508,28 @@
           if (quantityButton.dataset.action === 'increase') {
             input.value = currentValue + 1;
           } else {
+            // Allow quantity to go to 0
             input.value = Math.max(0, currentValue - 1);
+            // If quantity becomes 0, handle like a removal
+            if (input.value === '0') {
+              const itemElement = quantityButton.closest('.cart-overlay__item');
+              if (itemElement && itemElement.dataset.cartItem) {
+                this.removeItem(itemElement.dataset.cartItem);
+              }
+            } else {
+              this.updateCart();
+            }
+            return; // Skip the updateCart() call below if we've already called it or removeItem()
           }
           this.updateCart();
+        }
+      });
+
+      // Prevent direct input on quantity fields
+      this.overlay.addEventListener('keydown', (e) => {
+        if (e.target.matches('.cart-overlay__item-quantity input')) {
+          e.preventDefault();
+          return false;
         }
       });
 
@@ -164,33 +541,118 @@
           this.removeItem(itemKey);
         }
       });
+
+      // Set up add to cart event listener with simplified approach
+      this.setupAddToCartListeners();
+    }
+    
+    setupAddToCartListeners() {
+      // Simplified approach - just listen for all form submissions
+      document.addEventListener('submit', (e) => {
+        const form = e.target;
+        
+        // Skip if this is our cart form
+        if (form.closest('#cart-overlay')) return;
+        
+        // Check if it's an add to cart form
+        if (form.action && form.action.includes('/cart/add')) {
+          e.preventDefault();
+          
+          // One-time check to prevent race conditions
+          if (this.isAddingToCart) return;
+          this.isAddingToCart = true;
+          
+          const formData = new FormData(form);
+          
+          // Send the add to cart request
+          fetch('/cart/add.js', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            // Debounce cart updates - only refresh if it's been at least 500ms
+            const now = Date.now();
+            if (now - this.lastProductAddedTime > 500) {
+              this.lastProductAddedTime = now;
+              
+              // Refresh cart and then open it
+              this.refreshCart().then(() => {
+                // Open the cart after a slight delay to ensure DOM is updated
+                setTimeout(() => {
+                  this.openCart();
+                }, 100);
+              });
+            }
+            
+            this.isAddingToCart = false;
+          })
+          .catch(error => {
+            console.error('Error adding item to cart', error);
+            this.isAddingToCart = false;
+          });
+        }
+      });
+      
+      // Listen for clicks on add to cart buttons that might not be in forms
+      document.addEventListener('click', (e) => {
+        const addButton = e.target.closest('[name="add"]:not(form [name="add"])');
+        if (addButton && !this.isAddingToCart) {
+          // Probably a button that uses custom JS to add to cart
+          // Wait a bit and check cart
+          setTimeout(() => {
+            this.refreshCart().then(() => {
+              this.openCart();
+            });
+          }, 1000);
+        }
+      });
     }
 
     toggleCart() {
-      const isOpen = this.overlay.classList.contains('is-active');
-      if (isOpen) {
+      // This method is no longer needed, as we handle toggle logic directly in the click handler
+      if (this.isOpen) {
         this.closeCart();
       } else {
-        this.openCart();
+        this.refreshCart().then(() => {
+          this.openCart();
+        });
       }
     }
 
     openCart() {
+      // Guard against multiple opens
+      if (this.isOpen) return;
+      
       this.overlay.classList.add('is-active');
       this.toggleButton.setAttribute('aria-expanded', 'true');
       this.overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      this.toggleButton.classList.add('hover-dot--active');
+      this.isOpen = true;
+      
+      // Ensure cart stays open by marking it as newly opened
+      this.lastOpenTime = Date.now();
     }
 
     closeCart() {
+      // Don't close if we just opened (prevents flickering)
+      // But always allow closing when clicking the toggle button
+      if (this.lastOpenTime && Date.now() - this.lastOpenTime < 1000 && 
+          !event?.currentTarget?.classList.contains('cart-toggle')) {
+        return;
+      }
+      
       this.overlay.classList.remove('is-active');
       this.toggleButton.setAttribute('aria-expanded', 'false');
       this.overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      this.toggleButton.classList.remove('hover-dot--active');
+      this.isOpen = false;
     }
 
     async updateCart() {
       const form = this.overlay.querySelector('form');
+      if (!form) return;
+      
       const formData = new FormData(form);
       
       try {
@@ -223,6 +685,82 @@
         console.error('Error removing item:', error);
       }
     }
+    
+    async refreshCart() {
+      // Prevent multiple simultaneous refreshes
+      if (this.isRefreshing) {
+        return this.currentRefreshPromise;
+      }
+      
+      this.isRefreshing = true;
+      
+      try {
+        this.currentRefreshPromise = new Promise(async (resolve) => {
+          try {
+            const response = await fetch('/cart.js');
+            const cart = await response.json();
+            this.refreshCartHTML(cart);
+            resolve(cart);
+          } catch (error) {
+            console.error('Error fetching cart:', error);
+            resolve(null);
+          } finally {
+            this.isRefreshing = false;
+          }
+        });
+        
+        return this.currentRefreshPromise;
+      } catch (error) {
+        this.isRefreshing = false;
+        console.error('Error in refreshCart:', error);
+      }
+    }
+    
+    refreshCartHTML(cart) {
+      if (!this.itemsContainer || !cart) return;
+      
+      if (cart.item_count === 0) {
+        // Empty cart
+        this.itemsContainer.innerHTML = `
+          <div class="cart-overlay__empty">
+            <p>Your cart is empty</p>
+          </div>
+        `;
+      } else {
+        // Cart with items
+        let cartHTML = `
+          <form action="/cart" method="post" novalidate>
+            ${cart.items.map(item => `
+              <div class="cart-overlay__item" data-cart-item="${item.key}">
+                <div class="cart-overlay__item-image">
+                  <img src="${item.image ? item.image.replace(/(\.[^.]*)$/, '_200x$1') : ''}" alt="${item.title}">
+                </div>
+                <div class="cart-overlay__item-content">
+                  <h3 class="cart-overlay__item-title">${item.title}</h3>
+                  <div class="cart-overlay__item-price">${this.formatMoney(item.final_line_price)}</div>
+                  <div class="cart-overlay__item-quantity">
+                    <button type="button" class="quantity-adjust" data-action="decrease">-</button>
+                    <input type="number" name="updates[]" value="${item.quantity}" min="0" aria-label="Quantity">
+                    <button type="button" class="quantity-adjust" data-action="increase">+</button>
+                  </div>
+                  <button type="button" class="cart-overlay__item-remove" data-cart-remove="${item.key}">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+            
+            <div class="cart-overlay__footer">
+              <div class="cart-overlay__subtotal">
+                <span>Subtotal</span>
+                <span>${this.formatMoney(cart.total_price)}</span>
+              </div>
+              <button type="submit" name="checkout" class="hover-dot cart-overlay__checkout">CHECKOUT</button>
+            </div>
+          </form>
+        `;
+        
+        this.itemsContainer.innerHTML = cartHTML;
+      }
+    }
 
     updateCartUI(cart) {
       // Update cart count
@@ -231,16 +769,8 @@
         count.textContent = cart.item_count;
       }
 
-      // Update subtotal
-      const subtotal = document.querySelector('.cart-overlay__subtotal span:last-child');
-      if (subtotal) {
-        subtotal.textContent = this.formatMoney(cart.total_price);
-      }
-
-      // If cart is empty, refresh the page to show empty cart state
-      if (cart.item_count === 0) {
-        window.location.reload();
-      }
+      // Refresh the entire cart HTML
+      this.refreshCartHTML(cart);
     }
 
     formatMoney(cents) {

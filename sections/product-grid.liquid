@@ -1,0 +1,273 @@
+{%- assign product_limit = section.settings.product_limit -%}
+{%- assign products = collections.all.products -%}
+{%- assign product_count = products.size | at_most: product_limit -%}
+
+{%- if product_count > 0 -%}
+  <div class="product-grid-section">
+    <div class="container">
+      <div class="product-grid product-grid--count-{{ product_count }}">
+        {%- for product in products limit: product_limit -%}
+          <div class="product-card">
+            <a href="{{ product.url }}" class="product-card__link">
+              <div class="product-card__image-wrapper">
+                {%- if product.featured_image != blank -%}
+                  <img 
+                    src="{{ product.featured_image | img_url: '600x600', crop: 'center' }}" 
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="product-card__image"
+                    width="600"
+                    height="600"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'product-card__image placeholder-svg' }}
+                {%- endif -%}
+                
+                {% if product.available == false %}
+                  <div class="product-card__sold-out">
+                    <span>{{ 'products.product.sold_out' | t }}</span>
+                  </div>
+                {% elsif product.compare_at_price > product.price %}
+                  <div class="product-card__sale">
+                    <span>{{ 'products.product.on_sale' | t }}</span>
+                  </div>
+                {% endif %}
+              </div>
+              
+              <div class="product-card__info">
+                <div class="product-card__text-wrapper">
+                  <p class="product-card__title">{{ product.title }}</p>
+                  <div class="product-card__price">
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="product-card__price--sale">{{ product.price | money }}</span>
+                      <span class="product-card__price--compare">{{ product.compare_at_price | money }}</span>
+                    {%- else -%}
+                      <span>{{ product.price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="product-card__highlight"></div>
+              </div>
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+      
+      {% if section.settings.view_all and collections.all.products.size > product_limit %}
+        <div class="product-grid__view-all">
+          <a href="/collections/all" class="btn">{{ 'collections.general.view_all' | t }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{%- endif -%}
+
+<style>
+  /* ==========================================================================
+   Product Grid
+   ========================================================================== */
+.product-grid-section {
+  padding: 0.5rem 0.5rem;
+  margin: 1.5rem 0 3rem 0q;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+/* Adjust grid based on number of products */
+.product-grid--count-1 {
+  grid-template-columns: 1fr;
+  max-width: 50vw;
+  margin: 0 auto;
+}
+
+.product-grid--count-2 {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 75vw;
+  margin: 0 auto;
+}
+
+.product-card {
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.product-card__link {
+  display: block;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.product-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+}
+
+.product-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card__info {
+  position: relative;
+  padding: 20px 0;
+}
+
+.product-card__text-wrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  font-size: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: white;
+}
+
+.product-card__title {
+  margin: 0;
+  font-weight: bold;
+  max-width: 70%;
+  background-color: var(--product-highlight-color);
+  padding: 2px;
+}
+
+.product-card__price {
+  font-weight: bold;
+  white-space: nowrap;
+  background-color: var(--product-price-highlight-color);
+  padding: 2px;
+}
+
+.product-card__price--sale {
+  color: #e53935;
+  margin-right: 5px;
+}
+
+.product-card__price--compare {
+  color: #999;
+  font-weight: normal;
+  text-decoration: line-through;
+  font-size: 0.9em;
+  display: block;
+}
+
+.product-grid__view-all {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.product-grid__view-all .btn {
+  padding: 12px 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  background-color: var(--product-highlight-color);
+  color: var(--primary-color);
+  border-radius: 30px;
+}
+
+.product-grid__view-all .btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Responsive styles */
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    max-width: 75%;
+  }
+  
+  .product-grid--count-1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .product-grid--count-1,
+  .product-grid--count-2 {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  
+  .product-grid-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .product-card {
+    width: 100%;
+  }
+  
+  .product-card__title {
+    font-size: 1rem;
+    
+  }
+  
+  .product-card__price {
+    font-size: 1rem;
+  }
+
+  .product-card__text-wrapper {
+    align-items: center;
+  }
+} 
+</style>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Number of products to show",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %} 
+

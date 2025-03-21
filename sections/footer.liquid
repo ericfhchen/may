@@ -1,62 +1,12 @@
 <footer class="site-footer">
-  <div class="container">
-    <div class="site-footer__content">
-      <div class="site-footer__column site-footer__column--logo">
-        {% comment %} {% if section.settings.footer_logo != blank %}
-          <a href="/" class="site-footer__logo">
-            {% assign logo_alt = section.settings.footer_logo.alt | default: shop.name %}
-            {{ section.settings.footer_logo | image_url: width: 150 | image_tag: alt: logo_alt, class: 'site-footer__logo-image' }}
-          </a>
-        {% else %}
-          <a href="/" class="site-footer__logo site-footer__logo-text">
-            {{ shop.name }}
-          </a>
-        {% endif %} {% endcomment %}
-        
-        {% if section.settings.show_social_icons %}
-          <ul class="social-icons">
-            {% if settings.social_facebook_link != blank %}
-              <li class="social-icons__item">
-                <a href="{{ settings.social_facebook_link }}" class="social-icons__link" target="_blank" rel="noopener" aria-label="Facebook">
-                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-                    <path d="M18.05.811q.439 0 .744.305t.305.744v16.637q0 .439-.305.744t-.744.305h-4.732v-7.221h2.415l.342-2.854h-2.757v-1.83q0-.659.293-1t1.073-.342h1.488V3.762q-.976-.098-2.171-.098-1.634 0-2.635.964t-1 2.72V9.47H7.951v2.854h2.415v7.221H1.413q-.439 0-.744-.305t-.305-.744V1.859q0-.439.305-.744T1.413.81H18.05z" fill="currentColor"/>
-                  </svg>
-                </a>
-              </li>
-            {% endif %}
-            
-            {% if settings.social_instagram_link != blank %}
-              <li class="social-icons__item">
-                <a href="{{ settings.social_instagram_link }}" class="social-icons__link" target="_blank" rel="noopener" aria-label="Instagram">
-                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-                    <path d="M10.002 4.872A5.12 5.12 0 0 0 4.876 10a5.12 5.12 0 0 0 5.126 5.128A5.12 5.12 0 0 0 15.13 10a5.12 5.12 0 0 0-5.127-5.128zm0 8.462A3.34 3.34 0 0 1 6.67 10a3.337 3.337 0 0 1 3.333-3.334A3.337 3.337 0 0 1 13.335 10a3.34 3.34 0 0 1-3.333 3.334zm6.532-8.671c0 .664-.535 1.196-1.195 1.196a1.196 1.196 0 1 1 1.196-1.196zm3.396 1.213c-.076-1.602-.442-3.02-1.615-4.19C17.145.516 15.727.15 14.125.07c-1.65-.093-6.6-.093-8.25 0-1.597.076-3.016.442-4.19 1.611C.512 2.851.151 4.27.07 5.871c-.093 1.652-.093 6.601 0 8.253.076 1.602.442 3.02 1.615 4.19 1.174 1.17 2.588 1.535 4.19 1.616 1.65.093 6.6.093 8.25 0 1.602-.076 3.02-.442 4.19-1.616 1.169-1.17 1.534-2.588 1.615-4.19.093-1.652.093-6.596 0-8.248zm-2.133 10.02a3.375 3.375 0 0 1-1.9 1.9c-1.317.523-4.44.402-5.895.402-1.454 0-4.582.116-5.894-.402a3.375 3.375 0 0 1-1.9-1.9c-.523-1.317-.402-4.441-.402-5.896s-.116-4.583.401-5.895a3.375 3.375 0 0 1 1.901-1.901c1.316-.523 4.44-.402 5.894-.402 1.455 0 4.582-.116 5.894.402a3.375 3.375 0 0 1 1.901 1.9c.522 1.317.402 4.441.402 5.896s.12 4.583-.402 5.895z" fill="currentColor"/>
-                  </svg>
-                </a>
-              </li>
-            {% endif %}
-            
-            {% if settings.social_twitter_link != blank %}
-              <li class="social-icons__item">
-                <a href="{{ settings.social_twitter_link }}" class="social-icons__link" target="_blank" rel="noopener" aria-label="Twitter">
-                  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20">
-                    <path d="M19.551 4.208q-.815 1.202-1.956 2.038 0 .082.02.255t.02.255q0 1.589-.469 3.179t-1.426 3.036-2.272 2.567-3.158 1.793-3.963.672q-3.301 0-6.031-1.773.571.041.937.041 2.751 0 4.911-1.671-1.284-.02-2.292-.784T2.456 11.85q.346.082.754.082.55 0 1.039-.139-1.365-.285-2.262-1.365T1.09 7.918v-.041q.774.408 1.773.448-.795-.53-1.263-1.396t-.469-1.864q0-1.019.509-1.997 1.487 1.854 3.596 2.924T9.81 7.184q-.143-.509-.143-.897 0-1.63 1.161-2.781t2.832-1.151q.815 0 1.569.326t1.284.917q1.345-.265 2.506-.958-.428 1.386-1.732 2.18 1.243-.143 2.262-.611z" fill="currentColor"/>
-                  </svg>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        {% endif %}
+      
+      <div class="site-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} MAY
       </div>
       
       {% if section.settings.show_newsletter %}
         <div class="site-footer__column site-footer__column--newsletter">
-          {% comment %} <h3 class="site-footer__title">{{ section.settings.newsletter_title }}</h3> {% endcomment %}
-          {% if section.settings.newsletter_text != blank %}
-            <div class="site-footer__text">
-              {{ section.settings.newsletter_text }}
-            </div>
-          {% endif %}
-          
+        
           {% form 'customer', class: 'newsletter-form' %}
             <input type="hidden" name="contact[tags]" value="newsletter">
             <div class="newsletter-form__field-wrapper">
@@ -69,9 +19,11 @@
                 placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
                 required
               >
-              <button type="submit" class="newsletter-form__button btn" name="commit">
+              <div class="newsletter-form__button-wrapper">
+              <button type="submit" class="hover-dot newsletter-form__button btn" name="commit">
                 {{ 'general.newsletter_form.submit' | t }}
               </button>
+              </div>
             </div>
             {% if form.errors %}
               <div class="newsletter-form__error">{{ form.errors.messages['email'] }}</div>
@@ -82,28 +34,97 @@
           {% endform %}
         </div>
       {% endif %}
-    </div>
-    
-    <div class="site-footer__bottom">
-      <div class="site-footer__copyright">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}
+
+      <div class="site-footer__terms">
+        <a class="hover-dot" href="/pages/terms-and-privacy">Terms / Privacy </a>
       </div>
-      
-      {% if section.settings.show_payment_icons %}
-        <div class="site-footer__payment">
-          <span class="visually-hidden">{{ 'general.payment.methods' | t }}</span>
-          <ul class="payment-icons">
-            {% for type in shop.enabled_payment_types %}
-              <li class="payment-icons__item">
-                {{ type | payment_type_svg_tag: class: 'payment-icons__icon' }}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-    </div>
-  </div>
+
 </footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem;
+    align-items: center;
+  }
+
+  .newsletter-form__field {
+    border: none;
+    outline: none;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #000;
+    padding: 0.5rem;
+    font-family: 'May Grotesk', sans-serif !important;
+    background: none;
+  }
+  .newsletter-form__field-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .newsletter-form__button-wrapper {
+    position: relative;
+  }
+
+  .newsletter-form__field:focus {
+    background-color: transparent;
+    outline: none;
+  }
+
+  .newsletter-form__field:-webkit-autofill,
+  .newsletter-form__field:-webkit-autofill:hover,
+  .newsletter-form__field:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: var(--text-color);
+  }
+
+  .newsletter-form__button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.5rem;
+    font-family: 'May Grotesk', sans-serif !important;
+    background: none;
+    color: #000;
+  }
+
+  .newsletter-form__button:hover {
+    background: none;
+    color: #000;
+    cursor: pointer;
+  }
+
+  .site-footer__terms {
+    position: relative;
+  }
+
+  .site-footer__terms a {
+    color: var(--text-color);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .site-footer {
+      flex-direction: row;
+      justify-content: space-between;
+      font-size: 0.6rem;
+    }
+
+    .newsletter-form__field {
+      font-size: 0.6rem;
+      padding: 0.2rem 0.2rem;
+    }
+
+    .newsletter-form__button {
+      font-size: 0.6rem;
+    }
+
+  
+  }
+
+
+</style>
 
 {% schema %}
 {
