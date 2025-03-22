@@ -161,3 +161,29 @@ img {
   background-color: #005ba1;
   text-decoration: none;
 }
+
+/* Form field resets for Safari */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+
+/* Ensure Safari respects border-radius: 0 */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    border-radius: 0 !important;
+  }
+}
