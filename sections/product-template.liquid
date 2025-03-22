@@ -348,6 +348,41 @@
   @media screen and (max-width: 480px) {
     .product {
       height: 92.5%;
+      flex-direction: column-reverse;
+    }
+    
+    .product__media {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1; /* Modern browsers */
+      max-height: 100vw !important; /* Ensure it's not taller than it is wide */
+    }
+    
+    /* Fallback for browsers that don't support aspect-ratio */
+    @supports not (aspect-ratio: 1 / 1) {
+      .product__media {
+        height: 0;
+        padding-bottom: 100%; /* Creates a 1:1 aspect ratio */
+        overflow: hidden;
+      }
+    }
+    
+    .gallery-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    
+    .product__info {
+      width: 100%;
+      padding: 1rem 0.5rem;
+    }
+    
+    .product__description {
+      margin-bottom: 1rem;
+      max-height: none;
+      width: 100%;
     }
   }
 
