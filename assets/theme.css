@@ -172,18 +172,27 @@ input[type="search"],
 input[type="url"],
 input[type="date"],
 textarea,
-select {
+select,
+button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   border-radius: 0;
 }
 
-/* Ensure Safari respects border-radius: 0 */
+/* Ensure Safari respects border-radius: 0 and text color */
 @supports (-webkit-touch-callout: none) {
   input,
   textarea,
-  select {
+  select,
+  button {
     border-radius: 0 !important;
+  }
+  
+  /* Fix for Safari mobile default blue button text */
+  button {
+    -webkit-appearance: none;
+    -webkit-text-fill-color: currentColor;
+    color: inherit;
   }
 }

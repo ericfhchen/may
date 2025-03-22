@@ -227,7 +227,7 @@
   right: 0;
   bottom: 0;
   display: none;
-  z-index: 100;
+  z-index: 101;
 }
 
 .cart-overlay.is-active {
@@ -328,6 +328,10 @@
   font-weight: bold;
   font-family: var(--font-family);
   font-size: 1rem;
+  color: var(--primary-color);
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-text-fill-color: var(--primary-color);
 }
 
 .cart-overlay__item-remove {
@@ -337,6 +341,10 @@
   cursor: pointer;
   text-decoration: none;
   font-size: 0.8rem;
+  color: var(--primary-color);
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-text-fill-color: var(--primary-color);
 }
 
 .cart-overlay__footer {
@@ -408,6 +416,15 @@
 
   .cart-overlay__subtotal, .cart-overlay__checkout {
     font-size: 1rem;
+  }
+}
+
+/* Safari-specific fixes for iOS */
+@supports (-webkit-touch-callout: none) {
+  .quantity-adjust,
+  .cart-overlay__item-remove {
+    color: var(--primary-color) !important;
+    -webkit-text-fill-color: var(--primary-color) !important;
   }
 }
 </style>
