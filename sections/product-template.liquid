@@ -69,7 +69,7 @@
             {% for media in product.media %}
               <div class="gallery-slide{% if forloop.first %} active{% endif %}" data-slide-index="{{ forloop.index0 }}">
                 <img
-                  src="{{ media | img_url: '800x800', crop: 'center' }}"
+                  src="{{ media | img_url: '1000x1000', crop: 'center' }}"
                   alt="{{ media.alt | escape }}"
                   class="gallery-image"
                 >
@@ -182,6 +182,20 @@
 
   .product-form__add-to-cart:hover {
     background: var(--green-hover);
+  }
+  
+    /* Sold out button state */
+  .product-form__add-to-cart:disabled,
+  .product-form__add-to-cart[disabled] {
+    background-color: #E5E5E5; /* Light grey background */
+    color: #666666; /* Dark grey text */
+    cursor: not-allowed;
+    opacity: 1; /* Override default disabled opacity */
+  }
+  
+  .product-form__add-to-cart:disabled:hover,
+  .product-form__add-to-cart[disabled]:hover {
+    background-color: #E5E5E5; /* Keep the same background on hover */
   }
   
   /* Square aspect ratio media section */
