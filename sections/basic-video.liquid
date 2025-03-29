@@ -3,7 +3,16 @@
 {% schema %}
 {
   "name": "Basic Video",
-  "settings": [],
+  "settings": [
+    {
+      "type": "video_url",
+      "id": "video",
+      "label": "Video",
+      "accept": ["youtube", "vimeo", "mp4"],
+      "default": "",
+      "info": "Upload or link to a video file. MP4 format recommended."
+    }
+  ],
   "presets": [
     {
       "name": "Basic Video",
