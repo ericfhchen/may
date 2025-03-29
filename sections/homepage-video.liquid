@@ -1,0 +1,112 @@
+<!-- Homepage Video Section -->
+<div class="video-container">
+  <div class="container">
+    <div class="video-wrapper" style="position: relative;">
+      {% if section.settings.video != blank %}
+        <video class="video"
+          autoplay 
+          muted 
+          loop
+          playsinline
+        >
+          <source src="{{ section.settings.video }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      {% else %}
+        <!-- Placeholder for when no video is uploaded -->
+        <div class="video-placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .video-container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  }
+  
+  .video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .placeholder-svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.5;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Homepage Video",
+  "settings": [
+    {
+      "type": "video_url",
+      "id": "video",
+      "label": "Video",
+      "accept": ["youtube", "vimeo", "mp4"],
+      "default": "",
+      "info": "Upload or link to a video file. MP4 format recommended."
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "16:9",
+          "label": "16:9"
+        },
+        {
+          "value": "1:1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "9:16",
+          "label": "Portrait (9:16)"
+        }
+      ],
+      "default": "16:9"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show video controls",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Homepage Video",
+      "category": "Video"
+    }
+  ]
+}
+{% endschema %} 
