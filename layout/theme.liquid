@@ -15,8 +15,29 @@
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
+  <style>
+    :root {
+      --primary-color: {{ settings.color_primary }};
+      --secondary-color: {{ settings.color_secondary }};
+      --accent-color: {{ settings.color_accent }};
+      --text-color: {{ settings.color_text }};
+      --background-color: {{ settings.color_secondary }};
+      --border-color: #e5e5e5;
+      --font-family: 'May Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
+      --active-link-color: {{ settings.active_link_color }};
+      --hover-link-color: {{ settings.hover_link_color }};
+      --product-highlight-color: {{ settings.product_highlight_color }};
+      --product-price-highlight-color: {{ settings.product_price_highlight_color }};
+      --cta: {{ settings.cta_color }};
+      --cta-hover: {{ settings.cta_hover_color }};
+    }
+  </style>
+
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {{ 'product-grid.css' | asset_url | stylesheet_tag }}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Header hook for plugins -->
   {{ content_for_header }}
 </head>
 
@@ -30,6 +51,5 @@
   {% section 'footer' %}
 
   {{ 'theme.js' | asset_url | script_tag }}
-  {% comment %}{{ 'product-grid.js' | asset_url | script_tag }}{% endcomment %}
 </body>
 </html> 

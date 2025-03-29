@@ -63,6 +63,46 @@
         "id": "color_button_text",
         "label": "Button text",
         "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Theme specific colors"
+      },
+      {
+        "type": "color",
+        "id": "active_link_color",
+        "label": "Active link color",
+        "default": "#F9A4CD"
+      },
+      {
+        "type": "color",
+        "id": "hover_link_color",
+        "label": "Hover link color",
+        "default": "#EBCCDB"
+      },
+      {
+        "type": "color",
+        "id": "product_highlight_color",
+        "label": "Product title highlight",
+        "default": "#522CFB"
+      },
+      {
+        "type": "color",
+        "id": "product_price_highlight_color",
+        "label": "Product price highlight",
+        "default": "#E31176"
+      },
+      {
+        "type": "color",
+        "id": "cta_color",
+        "label": "Call to action color",
+        "default": "#0CBD09"
+      },
+      {
+        "type": "color",
+        "id": "cta_hover_color",
+        "label": "Call to action hover",
+        "default": "#28e725"
       }
     ]
   },
@@ -127,6 +167,43 @@
         "id": "social_youtube_link",
         "label": "YouTube",
         "info": "https://youtube.com/shopify"
+      }
+    ]
+  },
+  {
+    "name": "Background Effects",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Background Circles"
+      },
+      {
+        "type": "color",
+        "id": "circle_green_color",
+        "label": "Green Circle Color",
+        "default": "#0CBD09"
+      },
+      {
+        "type": "color",
+        "id": "circle_pink_color",
+        "label": "Pink Circle Color",
+        "default": "#F9A4CD"
+      },
+      {
+        "type": "color",
+        "id": "circle_yellow_color",
+        "label": "Yellow Circle Color",
+        "default": "#F1F9A4"
+      },
+      {
+        "type": "range",
+        "id": "circle_blur",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "px",
+        "label": "Circle Blur Amount",
+        "default": 35
       }
     ]
   },

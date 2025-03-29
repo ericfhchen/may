@@ -13,8 +13,8 @@
   --hover-link-color: #EBCCDB;
   --product-highlight-color: #522CFB;
   --product-price-highlight-color: #E31176;
-  --green: #0CBD09;
-  --green-hover: #28e725;
+  --cta: #0CBD09;
+  --cta-hover: #28e725;
 }
 
 @font-face {
