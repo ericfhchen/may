@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ shop.locale }}">
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,13 +41,17 @@
 </head>
 
 <body class="template-{{ template.name | handle }}">
-  {% section 'header' %}
+  {% unless template.name == 'password' %}
+    {% section 'header' %}
+  {% endunless %}
   
   <main role="main" id="MainContent">
     {{ content_for_layout }}
   </main>
 
-  {% section 'footer' %}
+  {% unless template.name == 'password' %}
+    {% section 'footer' %}
+  {% endunless %}
 
   {{ 'theme.js' | asset_url | script_tag }}
 </body>

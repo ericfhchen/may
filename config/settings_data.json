@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_primary": "#000000",
@@ -13,7 +22,8 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo_width": 150,
+          "logo": "shopify://shop_images/may-logo.svg",
+          "logo_width": 120,
           "menu": "main-menu"
         }
       },
@@ -47,8 +57,23 @@
           "newsletter_text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
           "copyright_text": "All rights reserved."
         }
+      },
+      "product-grid": {
+        "type": "product-grid",
+        "settings": {
+          "title": "Featured Products",
+          "product_limit": 3,
+          "show_view_all": false
+        }
+      },
+      "home-video": {
+        "type": "home-video",
+        "settings": {
+          "video_url": "https://cdn.shopify.com/videos/c/o/v/e2354af791eb4c9f98271a00d34dbdd7.mp4"
+        }
       }
-    }
+    },
+    "content_for_index": []
   },
   "presets": {
     "Default": {
@@ -103,4 +128,4 @@
       }
     }
   }
-} 
+}

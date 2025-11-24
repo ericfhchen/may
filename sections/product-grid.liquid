@@ -10,10 +10,11 @@
           <div class="product-card">
             <a href="{{ product.url }}" class="product-card__link">
               <div class="product-card__image-wrapper">
-                {%- if product.featured_image != blank -%}
+                {%- assign first_media = product.media.first -%}
+                {%- if first_media != blank -%}
                   <img 
-                    src="{{ product.featured_image | img_url: '600x600', crop: 'center' }}" 
-                    alt="{{ product.featured_image.alt | escape }}"
+                    src="{{ first_media | img_url: '600x600', crop: 'center' }}" 
+                    alt="{{ first_media.alt | escape }}"
                     class="product-card__image"
                     width="600"
                     height="600"
@@ -68,7 +69,7 @@
    ========================================================================== */
 .product-grid-section {
   padding: 0.5rem 0.5rem;
-  margin: 1.5rem 0 3rem 0q;
+  margin: 1.5rem 0 6rem 0q;
 }
 
 .product-grid {
@@ -129,6 +130,7 @@
   display: flex;
   justify-content: left;
   align-items: center;
+  flex-wrap: wrap;
   position: relative;
   z-index: 2;
   font-size: 1.5rem;
@@ -140,14 +142,13 @@
 .product-card__title {
   margin: 0;
   font-weight: bold;
-  max-width: 70%;
+  white-space: nowrap;
   background-color: var(--product-highlight-color);
   padding: 2px;
 }
 
 .product-card__price {
   font-weight: bold;
-  white-space: nowrap;
   background-color: var(--product-price-highlight-color);
   padding: 2px;
 }
@@ -194,19 +195,31 @@
 @media (max-width: 800px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    max-width: 75%;
+    gap: 1rem;
+    max-width: 100%;
   }
   
   .product-grid--count-1 {
     grid-template-columns: 1fr;
+  }
+  
+  .product-card__text-wrapper {
+    font-size: 1.2rem;
+  }
+  
+  .product-card__title {
+    font-size: 1.2rem;
+  }
+  
+  .product-card__price {
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 480px) {
   .product-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 0px;
     width: 100%;
   }
   
@@ -223,6 +236,10 @@
   
   .product-card {
     width: 100%;
+  }
+
+  .product-card__info {
+    padding-bottom: 0;
   }
   
   .product-card__title {

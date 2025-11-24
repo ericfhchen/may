@@ -217,5 +217,22 @@
         "info": "Will be scaled down to 32 x 32px"
       }
     ]
+  },
+  {
+    "name": "Password Page",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "password_text",
+        "label": "Text above password form",
+        "default": "<p>Enter your password to access the store.</p>"
+      },
+      {
+        "type": "text",
+        "id": "password_placeholder",
+        "label": "Password input placeholder",
+        "default": "Enter password for access"
+      }
+    ]
   }
 ] 

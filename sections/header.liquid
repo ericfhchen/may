@@ -2,9 +2,9 @@
   <div class="container">
     <div class="site-header__content">
       <div class="site-header__logo-container">
-          <a href="/" class="site-header__logo">
+          <a href="/" class="site-header__logo" style="width: {{ section.settings.logo_width }}px;">
             {% assign logo_alt = section.settings.logo.alt | default: shop.name %}
-            <img src="{{ 'may-logo.svg' | asset_url }}" alt="{{ logo_alt }}" class="site-header__logo-image">
+              <img src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ logo_alt }}" class="site-header__logo-image">
           </a>
       </div>
 
@@ -97,7 +97,6 @@
 
 .site-header__logo {
   display: block;
-  max-width: 150px;
 }
 
 .site-header__logo-image {
