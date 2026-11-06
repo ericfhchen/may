@@ -1,7 +1,16 @@
 <footer class="site-footer">
       
       <div class="site-footer__copyright">
-        &copy; {{ 'now' | date: '%Y' }} MAY
+        &copy; {{ 'now' | date: '%Y' }} may
+        {%- if settings.social_instagram_link != blank -%}
+          <a class="site-footer__ig" href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9A3.5 3.5 0 0 0 20 16.5v-9A3.5 3.5 0 0 0 16.5 4h-9z"/>
+              <path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+              <path d="M17.4 6.6a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+          </a>
+        {%- endif -%}
       </div>
       
       {% if section.settings.show_newsletter %}
@@ -42,6 +51,33 @@
 </footer>
 
 <style>
+  /* Instagram icon */
+  .site-footer__copyright {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .site-footer__ig {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+  
+  .site-footer__ig:hover {
+    opacity: 1;
+  }
+  
+  .site-footer__ig svg {
+    width: 35px;
+    height: 35px;
+    fill: currentColor;
+  }
+
   .site-footer {
     display: flex;
     flex-direction: row;

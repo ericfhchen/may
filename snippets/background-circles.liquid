@@ -66,8 +66,13 @@
       circle.style.top = `${randomY}px`;
     });
     
-    // Update positions on resize
+    // Update positions on resize. Ignore height-only resizes so the iOS URL bar
+    // showing/hiding while scrolling doesn't reshuffle the circles
+    let lastWidth = viewportWidth;
     window.addEventListener('resize', function() {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+
       const newIsMobile = window.innerWidth < 768;
       const newMinSize = newIsMobile ? 50 : 75;
       const newMaxSize = newIsMobile ? 75 : 125;

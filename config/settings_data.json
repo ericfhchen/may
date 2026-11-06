@@ -18,6 +18,9 @@
     "color_button_text": "#ffffff",
     "font_heading": "helvetica_n4",
     "font_body": "helvetica_n4",
+    "social_instagram_link": "https://www.instagram.com/may___now/",
+    "favicon": "shopify://shop_images/may-logo-512.svg",
+    "password_text": "",
     "sections": {
       "header": {
         "type": "header",
@@ -49,27 +52,29 @@
           "footer-0",
           "footer-1"
         ],
+        "custom_css": [],
         "settings": {
-          "show_social_icons": true,
+          "show_social_icons": false,
           "show_payment_icons": true,
           "show_newsletter": true,
           "newsletter_title": "Subscribe to our newsletter",
           "newsletter_text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
-          "copyright_text": "All rights reserved."
+          "copyright_text": "© 2026 may · Instagram"
         }
       },
       "product-grid": {
         "type": "product-grid",
         "settings": {
           "title": "Featured Products",
-          "product_limit": 3,
+          "products": [],
           "show_view_all": false
         }
       },
       "home-video": {
         "type": "home-video",
         "settings": {
-          "video_url": "https://cdn.shopify.com/videos/c/o/v/e2354af791eb4c9f98271a00d34dbdd7.mp4"
+          "video_url": "https://cdn.shopify.com/videos/c/vp/f5441b08c20e4229bb11f071a288e892/f5441b08c20e4229bb11f071a288e892.HD-1080p-7.2Mbps-64013328.mp4",
+          "featured_product": "may-bookends"
         }
       }
     },

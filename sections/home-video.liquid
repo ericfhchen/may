@@ -1,22 +1,83 @@
 <div class="video-container">
   <div class="container">
-    <div class="video-wrapper">
-      {% if section.settings.video_url != blank %}
+    <div class="video-wrapper" data-reveal>
+      {%- assign video = section.settings.video -%}
+      {%- if video != blank -%}
+        {%- comment -%}
+          Pick Shopify's MP4 renditions instead of the uploaded original (which can be 4K / 200MB+).
+          1080p for large or high-density screens, 720p for phones; chosen in JS on load.
+        {%- endcomment -%}
+        {%- assign src_large = '' -%}
+        {%- assign src_small = '' -%}
+        {%- assign large_h = 0 -%}
+        {%- assign small_h = 0 -%}
+        {%- for source in video.sources -%}
+          {%- if source.format == 'mp4' -%}
+            {%- if source.height <= 1080 and source.height > large_h -%}
+              {%- assign src_large = source.url -%}
+              {%- assign large_h = source.height -%}
+            {%- endif -%}
+            {%- if source.height <= 720 and source.height > small_h -%}
+              {%- assign src_small = source.url -%}
+              {%- assign small_h = source.height -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if src_small == blank -%}{%- assign src_small = src_large -%}{%- endif -%}
         <video class="video"
-          autoplay 
-          muted 
+          autoplay
+          muted
           loop
           playsinline
-        >
-          <source src="{{ section.settings.video_url }}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      {% else %}
+          preload="auto"
+          {% if video.preview_image %}poster="{{ video.preview_image | image_url: width: 1920 }}"{% endif %}
+          data-home-video
+          data-src-large="{{ src_large }}"
+          data-src-small="{{ src_small }}"
+        ></video>
+        {%- comment -%} Inline so the video starts downloading during page parse, not after theme.js {%- endcomment -%}
+        <script>
+          (function (video) {
+            var connection = navigator.connection || {};
+            var wantsLarge = window.innerWidth * (window.devicePixelRatio || 1) > 1400 && !connection.saveData;
+            video.src = wantsLarge ? video.dataset.srcLarge : video.dataset.srcSmall;
+          })(document.currentScript.previousElementSibling);
+        </script>
+      {%- elsif section.settings.video_url != blank -%}
+        <video class="video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          data-home-video
+          data-src-large="{{ section.settings.video_url }}"
+          data-src-small="{{ section.settings.video_url }}"
+        ></video>
+        {%- comment -%} Inline so the video starts downloading during page parse, not after theme.js {%- endcomment -%}
+        <script>
+          (function (video) {
+            var connection = navigator.connection || {};
+            var wantsLarge = window.innerWidth * (window.devicePixelRatio || 1) > 1400 && !connection.saveData;
+            video.src = wantsLarge ? video.dataset.srcLarge : video.dataset.srcSmall;
+          })(document.currentScript.previousElementSibling);
+        </script>
+      {%- else -%}
         <!-- Placeholder for when no video is uploaded -->
         <div class="video-placeholder">
           {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
         </div>
-      {% endif %}
+      {%- endif -%}
+
+      {%- assign featured_product = section.settings.featured_product -%}
+      {%- if featured_product != blank -%}
+        <a href="{{ featured_product.url }}" class="video-shop-link">
+          <span>Shop {{ featured_product.title }}</span>
+          <svg class="video-shop-link__arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M2 8h11M9 3.5 13.5 8 9 12.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+          </svg>
+        </a>
+      {%- endif -%}
     </div>
   </div>
 </div>
@@ -24,15 +85,73 @@
 <style>
   .video-container {
     width: 100%;
-    overflow: hidden;
+    padding: 2.75rem 3.5rem 4.5rem;
   }
   
   .video-wrapper {
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
+    border-radius: 22px;
+    overflow: hidden;
+    /* Keeps the video clipped to the rounded corners in Safari */
+    isolation: isolate;
+    transform: translateZ(0);
+    /* Logo pink (#F6ABCC) border and tinted shadow */
+    border: 1px solid #F6ABCC;
+    box-shadow: 0 -8px 24px rgba(246, 171, 204, 0.35), 0 2px 6px rgba(246, 171, 204, 0.2), 0 12px 32px rgba(246, 171, 204, 0.3);
+  }
+
+  @media (max-width: 800px) {
+    .video-container {
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .video-wrapper {
+      border-radius: 16px;
+    }
+
+    .video-shop-link {
+      right: 0.6rem;
+      bottom: 0.6rem;
+      font-size: 0.65rem;
+    }
   }
   
+  .video-shop-link {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    background-color: var(--product-highlight-color);
+    color: var(--secondary-color);
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .video-shop-link:hover {
+    background-color: var(--product-price-highlight-color);
+  }
+
+  .video-shop-link__arrow {
+    width: 0.85em;
+    height: 0.85em;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .video-shop-link:hover .video-shop-link__arrow {
+    transform: translateX(2px);
+  }
+
   .video {
     position: absolute;
     top: 0;
@@ -66,11 +185,23 @@
   "name": "Home Video",
   "settings": [
     {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Pick an uploaded video. Shopify serves a right-sized version for each screen, so this loads much faster than a Video URL."
+    },
+    {
       "type": "text",
       "id": "video_url",
-      "label": "Video URL",
+      "label": "Video URL (fallback)",
       "default": "https://cdn.shopify.com/videos/c/o/v/65c29df57278420c8c38885ededa28b5.mp4",
-      "info": "Enter the full URL to an MP4 video file"
+      "info": "Only used when no Video is picked above. Plays the file as-is, at full size."
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Shop link product",
+      "info": "Shows a \"Shop [product]\" link in the bottom-right corner of the video. Leave empty to hide it."
     }
   ],
   "presets": [

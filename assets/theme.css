@@ -143,6 +143,32 @@ img {
 }
 
 /* ==========================================================================
+   Home entrance
+   ========================================================================== */
+/* Product cards then the video fade + un-blur in place, sequenced in theme.js.
+   Only hidden when JS is running (.js), so content still shows without it. */
+.js .template-index [data-reveal] {
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 300ms ease-out, filter 300ms ease-out;
+}
+
+/* Ends on filter: none rather than blur(0) so no compositing layer is left behind */
+.js .template-index [data-reveal].is-revealed,
+.reveal-all .template-index [data-reveal] {
+  opacity: 1;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .template-index [data-reveal] {
+    opacity: 1;
+    filter: none;
+    transition: none;
+  }
+}
+
+/* ==========================================================================
    Buttons
    ========================================================================== */
 .btn {
@@ -194,5 +220,127 @@ button {
     -webkit-appearance: none;
     -webkit-text-fill-color: currentColor;
     color: inherit;
+  }
+}
+
+/* ==========================================================================
+   Cookie Banner (Shopify privacy banner, injected via content_for_header)
+   ========================================================================== */
+body .shopify-pc__banner__dialog {
+  top: auto !important;
+  right: auto !important;
+  bottom: 12px !important;
+  left: 12px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 340px !important;
+  max-height: none !important;
+  padding: 12px !important;
+  transform: none !important;
+  background: var(--secondary-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.65rem !important;
+  line-height: 1.3 !important;
+  text-transform: uppercase;
+}
+
+body .shopify-pc__banner__dialog .shopify-pc__banner__wrapper {
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+
+body .shopify-pc__banner__dialog .shopify-pc__banner__body {
+  width: 100% !important;
+  margin: 0 0 10px 0 !important;
+}
+
+body .shopify-pc__banner__dialog h2 {
+  font-size: 0.7rem !important;
+  margin: 0 0 4px 0 !important;
+  color: var(--primary-color) !important;
+}
+
+body .shopify-pc__banner__dialog p,
+body .shopify-pc__banner__dialog a {
+  font-size: inherit !important;
+  color: var(--primary-color) !important;
+}
+
+/* May Grotesk only ships a bold cut, so body copy uses the regular fallback */
+body .shopify-pc__banner__dialog p {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif !important;
+  font-size: 0.65rem !important;
+  font-weight: normal !important;
+  text-transform: none;
+}
+
+body .shopify-pc__banner__dialog .shopify-pc__banner__btns {
+  min-width: 0 !important;
+  width: 100% !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  justify-content: flex-start !important;
+  /* Accept and Decline use different fonts, so align on text baseline, not box center */
+  align-items: baseline !important;
+  gap: 14px;
+}
+
+body .shopify-pc__banner__dialog button {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  font-family: inherit !important;
+  font-size: 0.65rem !important;
+  font-weight: bold;
+  line-height: 1 !important;
+  text-transform: uppercase;
+  border-radius: 30px !important;
+  transition: opacity 0.2s ease;
+}
+
+body .shopify-pc__banner__dialog button:hover {
+  opacity: 0.8;
+}
+
+body .shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept,
+body .shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline {
+  padding: 5px 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: var(--primary-color) !important;
+}
+
+body .shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept {
+  order: 1 !important;
+}
+
+body .shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline {
+  order: 2 !important;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif !important;
+  font-weight: normal;
+}
+
+body .shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs {
+  order: 3 !important;
+  padding: 5px 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--primary-color) !important;
+}
+
+#shopify-pc__prefs {
+  font-family: var(--font-family);
+}
+
+@media (max-width: 480px) {
+  body .shopify-pc__banner__dialog {
+    right: 8px !important;
+    bottom: 8px !important;
+    left: 8px !important;
+    max-width: none !important;
   }
 }

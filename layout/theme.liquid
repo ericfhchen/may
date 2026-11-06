@@ -16,6 +16,15 @@
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
+  {%- comment -%}
+    Flags JS so home entrance items only start hidden when the script can reveal them.
+    The timeout is a failsafe that shows everything if theme.js never runs.
+  {%- endcomment -%}
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { document.documentElement.classList.add('reveal-all'); }, 3000);
+  </script>
+
   <style>
     :root {
       --primary-color: {{ settings.color_primary }};
@@ -34,6 +43,8 @@
     }
   </style>
 
+  {%- comment -%} The font is only referenced from theme.css, so preload it to avoid a late swap on the nav {%- endcomment -%}
+  {{ 'AkzidenzGroteskPro-Bold.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   
   <!-- Header hook for plugins -->
@@ -53,6 +64,6 @@
     {% section 'footer' %}
   {% endunless %}
 
-  {{ 'theme.js' | asset_url | script_tag }}
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
 </body>
 </html> 

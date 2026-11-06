@@ -39,7 +39,7 @@
           {% for item in cart.items %}
             <div class="cart-overlay__item" data-cart-item="{{ item.key }}">
               <div class="cart-overlay__item-image">
-                <img src="{{ item.image | img_url: '120x' }}" alt="{{ item.title | escape }}">
+                <img src="{{ item.image | image_url: width: 400 }}" alt="{{ item.title | escape }}" loading="lazy">
               </div>
               <div class="cart-overlay__item-content">
                 <h3 class="cart-overlay__item-title">{{ item.product.title }}</h3>
@@ -749,7 +749,7 @@
             ${cart.items.map(item => `
               <div class="cart-overlay__item" data-cart-item="${item.key}">
                 <div class="cart-overlay__item-image">
-                  <img src="${item.image ? item.image.replace(/(\.[^.]*)$/, '_200x$1') : ''}" alt="${item.title}">
+                  <img src="${item.image ? item.image + (item.image.includes('?') ? '&' : '?') + 'width=400' : ''}" alt="${item.title}">
                 </div>
                 <div class="cart-overlay__item-content">
                   <h3 class="cart-overlay__item-title">${item.title}</h3>

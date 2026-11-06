@@ -14,6 +14,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Home entrance: product cards fade in one after another (50ms apart), then the video.
+  // Each above-the-fold card waits for its image so it never fades in empty.
+  const revealItems = document.querySelectorAll('.template-index [data-reveal]');
+  let revealChain = Promise.resolve();
+
+  revealItems.forEach((item) => {
+    const img = item.querySelector('img[loading="eager"]');
+    const imageReady = img && !img.complete
+      ? new Promise((resolve) => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+          setTimeout(resolve, 1500);
+        })
+      : Promise.resolve();
+
+    revealChain = Promise.all([revealChain, imageReady]).then(() => {
+      item.classList.add('is-revealed');
+      return new Promise((resolve) => setTimeout(resolve, 50));
+    });
+  });
+
+  // Home video starts on load (src is set inline in home-video.liquid); pause it while off screen to save CPU
+  const homeVideos = document.querySelectorAll('video[data-home-video]');
+
+  if ('IntersectionObserver' in window) {
+    homeVideos.forEach((video) => {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const playing = video.play();
+            if (playing) playing.catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      }).observe(video);
+    });
+  }
+
   // Mobile menu toggle
   const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');

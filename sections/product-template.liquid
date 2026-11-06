@@ -79,11 +79,23 @@
               {%- comment -%}Skip the first image if there's more than one image{%- endcomment -%}
               {%- if product.media.size == 1 or forloop.index > 1 -%}
                 <div class="gallery-slide{% if slide_index == 0 %} active{% endif %}" data-slide-index="{{ slide_index }}">
-                  <img
-                    src="{{ media | img_url: '1000x1000', crop: 'center' }}"
-                    alt="{{ media.alt | escape }}"
-                    class="gallery-image"
-                  >
+                  {%- comment -%} Only the first slide loads up front; the rest are warmed after page load {%- endcomment -%}
+                  {%- if slide_index == 0 -%}
+                    {{ media | image_url: width: 2048, height: 2048, crop: 'center' | image_tag:
+                      class: 'gallery-image',
+                      widths: '600, 900, 1200, 1600, 2048',
+                      sizes: '(max-aspect-ratio: 1/1) 100vw, 100vh',
+                      loading: 'eager',
+                      fetchpriority: 'high'
+                    }}
+                  {%- else -%}
+                    {{ media | image_url: width: 2048, height: 2048, crop: 'center' | image_tag:
+                      class: 'gallery-image',
+                      widths: '600, 900, 1200, 1600, 2048',
+                      sizes: '(max-aspect-ratio: 1/1) 100vw, 100vh',
+                      loading: 'lazy'
+                    }}
+                  {%- endif -%}
                 </div>
                 {%- assign slide_index = slide_index | plus: 1 -%}
               {%- endif -%}
@@ -458,6 +470,11 @@
       const slides = gallery.querySelectorAll('.gallery-slide');
       const totalSlides = parseInt(gallery.dataset.totalSlides, 10);
       let currentSlide = 0;
+      
+      // Hidden slides are lazy, so fetch them once the page has settled to keep clicks instant
+      window.addEventListener('load', function() {
+        gallery.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
+      });
       
       function showSlide(index) {
         slides.forEach(slide => slide.classList.remove('active'));

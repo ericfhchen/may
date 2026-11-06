@@ -17,7 +17,7 @@
               <div class="cart-item__col cart-item__col--product">
                 <div class="cart-item__image-wrapper">
                   <a href="{{ item.url }}" class="cart-item__image-link">
-                    <img src="{{ item | img_url: '150x' }}" alt="{{ item.title | escape }}" class="cart-item__image">
+                    {{ item.image | image_url: width: 300 | image_tag: alt: item.title, class: 'cart-item__image', loading: 'lazy' }}
                   </a>
                 </div>
                 
